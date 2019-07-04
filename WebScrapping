@@ -1,0 +1,39 @@
+import requests
+response1=requests.get('https://www.sfu.ca/computing/people/faculty.html')
+import lxml.html
+tree = lxml.html.fromstring(response1.text)
+
+# LIST OF AREAS OF INTEREST
+
+import re
+xpath_ex= tree.xpath('//div[@class="text"]/p')
+rm=[]
+for x in xpath_ex:
+    
+    y=x.text_content()
+    rm.append(y)
+   
+for i in range(0,len(rm),2):
+    re.sub('Profile & Contact Information  |  Home Page', ' ', rm[i])
+    print(rm[i])
+    
+#LIST OF FACULTY NAMES
+xpath_ex_2=tree.xpath('//div[@class="text"]/h4')
+names=[]
+
+for x in xpath_ex_2:
+    #print(x.text_content())
+    y=x.text_content()
+    names.append(y)
+for i in range(0,len(names)):
+    print(names[i])
+    
+ #PART 2 OF ASSIGNMENT
+
+response2=requests.get('https://www.sfu.ca/computing/people/faculty/martinester.html')
+tree2 = lxml.html.fromstring(response2.text)
+    
+
+research_interests=tree2.xpath('//div[@class="listed"]/ul')[0]
+print("Research Interests \n")
+print(research_interests.text_content())
